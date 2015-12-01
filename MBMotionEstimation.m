@@ -2,6 +2,12 @@ function [iMVy, iMVx] = MBMotionEstimation(currentFrame, referenceFrame, y, x)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
+% For testing
+mbSize = 16;
+w = 176;
+h = 144;
+small_motion = false;
+
 iMVy = 0;
 iMVx = 0;
 
@@ -13,12 +19,24 @@ iSAD0 = GetSAD(currentFrame, referenceFrame, y, x, 0, 0, 65535);
 % Large motion
 for i = -step_size_lm:step_size_lm:step_size_lm
     for j = -step_size_lm:step_size_lm:step_size_lm
+
         % Check for boundary condtions
         %
-        %
-        
-        iSAD = GetSAD(currentFrame, referenceFrame, y, x, i, j, iSAD0);
-        
+        if (y + i < 1) || (y + i + mbSize >= h) || (x + j < 1) || (x + j + mbSize >= w)
+            continue
+        end
+        %disp('y + i < 1: ');  disp((y + i));
+        %disp('y + i + mbSize >= h: '); disp((y + i + mbSize));
+        %disp('x + j < 1: '); disp((x + j));
+        %disp('x + j + mbSize >= w: '); disp((x + j + mbSize));
+        try
+            iSAD = GetSAD(currentFrame, referenceFrame, y, x, i, j, iSAD0);
+        catch ME
+            disp('y + i < 1: ');  disp((y + i));
+            disp('y + i + mbSize >= h: '); disp((y + i + mbSize));
+            disp('x + j < 1: '); disp((x + j));
+            disp('x + j + mbSize >= w: '); disp((x + j + mbSize));
+        end
         if iSAD < (iSAD0 * 0.925)
             iSAD0 = iSAD;
             iMVy = i;
@@ -32,7 +50,9 @@ for i = -step_size_sm:step_size_sm:step_size_sm
     for j = -step_size_sm:step_size_sm:step_size_sm
         % Check for boundary condtions
         %
-        %
+        if (y + i < 1) || (y + i + mbSize >= h) || (x + j < 1) || (x + j + mbSize >= w)
+            continue
+        end
         
         
         % We already checked (0,0)
@@ -46,7 +66,7 @@ for i = -step_size_sm:step_size_sm:step_size_sm
             iSAD0 = iSAD;
             iMVy = i;
             iMVx = j;
-            small_motion = TRUE; % So we know to continue with the small motion version of the algorithm
+            small_motion = true; % So we know to continue with the small motion version of the algorithm
         end
     end
 end
@@ -57,7 +77,9 @@ if small_motion
         for j = -step_size_sm:step_size_sm:step_size_sm
             % Check for boundary condtions
             %
-            %
+            if (y + i < 1) || (y + i + mbSize >= h) || (x + j < 1) || (x + j + mbSize >= w)
+                continue
+            end
 
 
             % We already checked (0,0)
@@ -84,7 +106,9 @@ else
             for j = -step_size_lm:step_size_lm:step_size_lm
                 % Check for boundary condtions
                 %
-                %
+                if (y + i < 1) || (y + i + mbSize >= h) || (x + j < 1) || (x + j + mbSize >= w)
+                    continue
+                end
 
                 iSAD = GetSAD(currentFrame, referenceFrame, y, x, i, j, iSAD0);
 
