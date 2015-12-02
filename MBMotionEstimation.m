@@ -29,14 +29,9 @@ for i = -step_size_lm:step_size_lm:step_size_lm
         %disp('y + i + mbSize >= h: '); disp((y + i + mbSize));
         %disp('x + j < 1: '); disp((x + j));
         %disp('x + j + mbSize >= w: '); disp((x + j + mbSize));
-        try
-            iSAD = GetSAD(currentFrame, referenceFrame, y, x, i, j, iSAD0);
-        catch ME
-            disp('y + i < 1: ');  disp((y + i));
-            disp('y + i + mbSize >= h: '); disp((y + i + mbSize));
-            disp('x + j < 1: '); disp((x + j));
-            disp('x + j + mbSize >= w: '); disp((x + j + mbSize));
-        end
+
+        iSAD = GetSAD(currentFrame, referenceFrame, y, x, i, j, iSAD0);
+
         if iSAD < (iSAD0 * 0.925)
             iSAD0 = iSAD;
             iMVy = i;
@@ -110,6 +105,11 @@ else
                     continue
                 end
 
+                % We already checked (0,0)
+                if (i==0) && (j==0)
+                    continue
+                end
+                
                 iSAD = GetSAD(currentFrame, referenceFrame, y, x, i, j, iSAD0);
 
                 if iSAD < (iSAD0 * 0.925)
