@@ -14,6 +14,7 @@ iMVx = 0;
 step_size_lm = 4;
 step_size_sm = 1;
 
+
 iSAD0 = GetSAD(currentFrame, referenceFrame, y, x, 0, 0, 65535);
 
 % Large motion

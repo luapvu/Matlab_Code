@@ -9,7 +9,7 @@ UV_Width = frameWidth / 2;
 
 %adding noise to the Y frame
 for i = 1:numFrames
-    Y_noise{1,i} = Y{1,i} + 5*randn(frameHeight,frameWidth);
+    Y_noise{1,i} = Y{1,i} + 10*randn(frameHeight,frameWidth);
 end
 
 %adding noise to the U frame

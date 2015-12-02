@@ -1,4 +1,4 @@
-function [ variance ] = GetTemporalVariance( currentFrame, referenceFrame, x, y)
+function [ variance ] = GetTemporalVariance( currentFrame, referenceFrame, y, x)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 temp = 0;

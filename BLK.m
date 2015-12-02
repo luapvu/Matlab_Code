@@ -1,6 +1,7 @@
-function BLK(previousFrame, currentFrame, nextFrame, y, x, Kbm, Kbl)
+function [ filteredBlock ] = BLK(previousFrame, currentFrame, nextFrame, y, x, Kbm, Kbl)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
+
 
 Pkk_1 = GetTemporalVariance(currentFrame, previousFrame, y, x);
 Pkk_2 = GetTemporalVariance(nextFrame, currentFrame, y, x);
@@ -20,9 +21,9 @@ Kk_2 = Pkk_2 / (Pkk_2 + Kbl);
 Xkfinal_1 = Xkk_1 + Kk_1 * (currentFrame(y:y+15,x:x+15) - Xkk_1);
 Xkfinal_2 = Xkk_2 + Kk_2 * (currentFrame(y:y+15,x:x+15) - Xkk_2);
 
-Xk_avg = (Xkfinal_1 + Xkfinal_2)/2;
+filteredBlock = (Xkfinal_1 + Xkfinal_2)/2;
 
-currentFrame(y:y+15,x:x+15) = Xk_avg;
+%currentFrame(y:y+15,x:x+15) = Xk_avg;
 
 end
 
