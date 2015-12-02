@@ -1,4 +1,4 @@
-function [ Flag ] = MotionDetection( previousFrame, currentFrame, nextFrame, y, x )
+function [ Flag, Kbm, Kbl ] = MotionDetection( previousFrame, currentFrame, nextFrame, y, x )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     Kbm = 0;
