@@ -26,17 +26,17 @@ function [ Flag, Kbm, Kbl ] = MotionDetection( previousFrame, currentFrame, next
     Kbm = Kbm / (16*16);
     Kbl = Kbl / (16*16);
     
-    disp('Kbm:');
-    disp(Kbm);
-    disp('Kbl:');
-    disp(Kbl);
+    %disp('Kbm:');
+    %disp(Kbm);
+    %disp('Kbl:');
+    %disp(Kbl);
     
-    variance_prev = Get_Variance(currentFrame, y, x, iMV_Bkwdy, iMV_Bkwdx);
+    variance_prev = Get_Variance(currentFrame, y, x, iMV_Bkwdy, iMV_Bkwdx, 16);
     %disp('variance_prev:');
     %disp(variance_prev);
-    variance_next = Get_Variance(currentFrame, y, x, iMV_Fwdy, iMV_Fwdx);
+    variance_next = Get_Variance(currentFrame, y, x, iMV_Fwdy, iMV_Fwdx, 16);
     
-    variance_current = Get_Variance(currentFrame, y, x, 0, 0);
+    variance_current = Get_Variance(currentFrame, y, x, 0, 0, 16);
     %disp('variance_next:');
     %disp(variance_next);
     T = min([variance_prev,variance_next,variance_current]);

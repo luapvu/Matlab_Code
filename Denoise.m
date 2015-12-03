@@ -8,16 +8,24 @@ motion_flags(99) = 0;
 Kbm(99) = 0;
 Kbl(99) = 0;
 
-for frame = 2:numberOfFrames-1
+for frame = 1:numberOfFrames
     i = 1;
+    disp('frame: ');
+    disp(frame);
     for y=1:16:144
         for x=1:16:176
-            disp('frame: ');
-            disp(frame);
+            if frame == 1 || frame == numberOfFrames
+                Y_denoised{1,frame}(y:y+15,x:x+15)= ANL( Y_noisy{1,frame}, y, x );
+                continue
+            end
+            
+            
             [motion_flags(i), Kbm(i), Kbl(i)] = MotionDetection(Y_noisy{1,frame-1}, Y_noisy{1,frame}, Y_noisy{1,frame+1}, y, x);
             
             if ~(motion_flags(i))
                 Y_denoised{1,frame}(y:y+15,x:x+15)=BLK(Y_noisy{1,frame-1}, Y_noisy{1,frame}, Y_noisy{1,frame+1}, y, x, Kbm(i), Kbl(i));
+            else
+                Y_denoised{1,frame}(y:y+15,x:x+15)= ANL( Y_noisy{1,frame}, y, x );
             end
         end
     end
