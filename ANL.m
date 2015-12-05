@@ -11,10 +11,10 @@ function [ filteredBlock ] = ANL( currentFrame, y, x )
         for j=0:4:15
             uBlockVariance(i+1,j+1) = Get_Variance(currentFrame, y+i, x+j, 0, 0, 4);
             
-            if currentMBVariance < uBlockVariance(i+1,j+1)
+            %if currentMBVariance < uBlockVariance(i+1,j+1)
                 filteredUBlock = CalculateAnl(currentFrame, y+i, x+j);
                 filteredBlock(i+1:i+4,j+1:j+4) = filteredUBlock;
-            end
+           % end
         end
     end
     

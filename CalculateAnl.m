@@ -1,25 +1,45 @@
 function [ filteredUBlock ] = CalculateAnl( currentFrame, y, x )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
+    filteredUBlock(4,4)=0;
     
     for i=0:3
         for j=0:3
-            pixelValueVariance1 = Get_Variance(currentFrame, y+i-1,x+j-1,0,0,2); 
-            pixelValueVariance2 = Get_Variance(currentFrame, y+i,x+j,0,0,2);
             
-            pixelValueMean1 = GetANLMean(currentFrame, y+i-1,x+j-1);
-            pixelValueMean2 = GetANLMean(currentFrame, y+i,x+j);
+            pixelValueVariance(1) = Get_Variance(currentFrame, y+i-1,x+j-1,0,0,2); 
+            pixelValueVariance(2) = Get_Variance(currentFrame, y+i,x+j,0,0,2);
+            pixelValueVariance(3) = Get_Variance(currentFrame, y+i+1,x+j,0,0,2);
+            pixelValueVariance(4) = Get_Variance(currentFrame, y+i,x+j-1,0,0,2);
             
-            ratio = pixelValueVariance1/pixelValueVariance2;
+            pixelValueMean(1) = GetANLMean(currentFrame, y+i-1,x+j-1);
+            pixelValueMean(2) = GetANLMean(currentFrame, y+i,x+j);
+            pixelValueMean(3) = GetANLMean(currentFrame, y+i+1,x+j);
+            pixelValueMean(4) = GetANLMean(currentFrame, y+i,x+j-1);
+            weight(4)=0;
             
-            temp1 = ratio/(1+ratio);
-            temp2 = 1-temp1;
-            
-            if pixelValueVariance1 < pixelValueVariance2
-                filteredUBlock(i+1,j+1) = temp1*pixelValueMean1+temp2*pixelValueMean2;
-            else
-                filteredUBlock(i+1,j+1) = temp2*pixelValueMean1+temp1*pixelValueMean2;
+            for k=1:4
+                weight(k) = pixelValueVariance(k)/(pixelValueVariance(1)+pixelValueVariance(2)+pixelValueVariance(3)+pixelValueVariance(4));
             end
+            weight = sort(weight);
+            
+            weighted_avg = 0;
+            % Largest variance (fucked up) associated with smallest
+            % weighting which is multiplied by its mean
+            for l=1:4
+                [maximum_var, index_var] = max(pixelValueVariance);
+                pixelValueVariance(index_var) = -1;
+                
+                weighted_avg = weighted_avg + (pixelValueMean(index_var)*weight(l));
+            end
+            
+            
+            %ratio = pixelValueVariance1/pixelValueVariance2;
+            
+            %temp1 = ratio/(1+ratio);
+            %temp2 = 1-temp1;
+            filteredUBlock(i+1,j+1) = weighted_avg;
+
+            
         end
     end
 
